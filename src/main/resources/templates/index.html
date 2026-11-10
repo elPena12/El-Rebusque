@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Muro de cómics')}"></head>
+<body>
+<header th:replace="~{fragments :: encabezado}"></header>
+
+<main>
+    <section class="portadilla">
+        <div class="portadilla__interior">
+            <h1 class="portadilla__titulo">De estudiante a estudiante.</h1>
+            <p class="portadilla__bajada">Busca por nombre o categoría y escríbele directo al vendedor.</p>
+
+            <form class="globo" th:action="@{/}" method="get" role="search">
+                <label class="visualmente-oculto" for="q">Nombre del cómic</label>
+                <input class="globo__texto" type="search" id="q" name="q" th:value="${q}"
+                       placeholder="¿Qué cómic buscas hoy?" autocomplete="off">
+                <label class="visualmente-oculto" for="categoria">Categoría</label>
+                <select class="globo__categoria" id="categoria" name="categoria">
+                    <option value="">Todas las categorías</option>
+                    <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"
+                            th:selected="${c.id == categoriaSel}">Manga</option>
+                </select>
+                <button class="boton boton--negro" type="submit">Buscar</button>
+            </form>
+
+            <nav class="chips" aria-label="Categorías">
+                <a class="chip" th:classappend="${categoriaSel == null} ? 'chip--activo'"
+                   th:href="@{/(q=${q})}">Todas</a>
+                <a class="chip" th:each="c : ${categorias}"
+                   th:classappend="${c.id == categoriaSel} ? 'chip--activo'"
+                   th:href="@{/(categoria=${c.id},q=${q})}" th:text="${c.nombre}">Manga</a>
+            </nav>
+        </div>
+    </section>
+
+    <div class="contenedor">
+        <div th:replace="~{fragments :: avisos}"></div>
+
+        <div class="resultado" th:if="${filtrando}">
+            <p>
+                <strong th:text="${#lists.size(comics)}">3</strong>
+                <span th:text="${#lists.size(comics) == 1} ? 'resultado' : 'resultados'">resultados</span>
+                <th:block th:if="${!#strings.isEmpty(q)}">para <strong th:text="'«' + ${q} + '»'">«akira»</strong></th:block>
+                <th:block th:if="${nombreCategoriaSel != null}">en <strong th:text="${nombreCategoriaSel}">Manga</strong></th:block>
+            </p>
+            <a th:href="@{/}">Quitar filtros</a>
+        </div>
+
+        <section class="muro" th:if="${!#lists.isEmpty(comics)}" aria-label="Cómics publicados">
+            <article class="vineta" th:each="comic : ${comics}" th:classappend="${comic.agotado} ? 'vineta--agotada'">
+                <a class="vineta__enlace" th:href="@{/comics/{id}(id=${comic.id})}">
+                    <div class="portada">
+                        <th:block th:replace="~{fragments :: portada(${comic})}"></th:block>
+                        <span class="sello" th:if="${comic.agotado}">Agotado</span>
+                    </div>
+                    <div class="vineta__texto">
+                        <h2 class="vineta__titulo" th:text="${comic.titulo}">Akira Vol. 1</h2>
+                        <p class="vineta__meta">
+                            <span th:text="${comic.categoria.nombre}">Manga</span>
+                            <span th:text="${comic.usuario.ciudadDepartamento}">Bogotá, Cundinamarca</span>
+                        </p>
+                    </div>
+                    <span class="precio" th:text="'$' + ${#numbers.formatDecimal(comic.precio, 1, 'POINT', 0, 'COMMA')}">$85.000</span>
+                </a>
+            </article>
+        </section>
+
+        <section class="vacio" th:if="${#lists.isEmpty(comics)}">
+            <h2 th:text="${filtrando} ? 'Nadie ha publicado ese cómic todavía' : 'El muro está vacío'">El muro está vacío</h2>
+            <p th:if="${filtrando}">Pruebe con otro nombre o con todas las categorías.</p>
+            <p th:unless="${filtrando}">Publica tu primer cómic y aparecerá aquí.</p>
+            <a class="boton boton--amarillo" th:href="@{/publicar}">Publicar cómic</a>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: pie}"></footer>
+</body>
+</html>

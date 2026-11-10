@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Publicar cómic')}"></head>
+<body>
+<header th:replace="~{fragments :: encabezado}"></header>
+
+<main class="contenedor contenedor--medio">
+    <div class="tarjeta-form">
+        <h1 class="titulo-pagina">Publicar cómic</h1>
+        <p class="tarjeta-form__intro">Aparecerá en el muro con su nombre y ciudad. Los compradores le escriben directamente.</p>
+
+        <form th:action="@{/publicar}" th:object="${form}" method="post" enctype="multipart/form-data" class="formulario" novalidate>
+            <p class="aviso aviso--error" th:if="${#fields.hasGlobalErrors()}" th:each="e : ${#fields.globalErrors()}" th:text="${e}">La portada debe ser JPG</p>
+
+            <div class="campo">
+                <label for="titulo">Título</label>
+                <input type="text" th:field="*{titulo}" maxlength="200" required placeholder="Ej.: Akira Vol. 1">
+                <p class="campo__error" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></p>
+            </div>
+
+            <div class="rejilla-3">
+                <div class="campo">
+                    <label for="idCategoria">Categoría</label>
+                    <select th:field="*{idCategoria}" required>
+                        <option value="">Elija una</option>
+                        <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}">Manga</option>
+                    </select>
+                    <p class="campo__error" th:if="${#fields.hasErrors('idCategoria')}" th:errors="*{idCategoria}"></p>
+                </div>
+                <div class="campo">
+                    <label for="precio">Precio (COP)</label>
+                    <input type="number" th:field="*{precio}" min="1" step="any" required inputmode="numeric" placeholder="Ej.: 45000">
+                    <p class="campo__error" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></p>
+                </div>
+                <div class="campo">
+                    <label for="stock">Unidades</label>
+                    <input type="number" th:field="*{stock}" min="0" step="1" required>
+                    <p class="campo__error" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></p>
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="descripcion">Descripción <span class="opcional">(opcional)</span></label>
+                <textarea th:field="*{descripcion}" rows="5" maxlength="5000"
+                          placeholder="Edición, idioma, estado, si tiene firmas o páginas marcadas…"></textarea>
+                <p class="campo__error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></p>
+            </div>
+
+            <fieldset>
+                <legend>Portada <span class="opcional">(opcional)</span></legend>
+                <div class="rejilla-2">
+                    <div class="campo">
+                        <label for="imagenArchivo">Subir foto</label>
+                        <input type="file" id="imagenArchivo" name="imagenArchivo" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <p class="campo__ayuda">JPG, PNG, WEBP o GIF, hasta 5 MB.</p>
+                    </div>
+                    <div class="campo">
+                        <label for="imagenUrl">O pegar enlace de la imagen</label>
+                        <input type="url" th:field="*{imagenUrl}" maxlength="500" placeholder="https://…">
+                        <p class="campo__error" th:if="${#fields.hasErrors('imagenUrl')}" th:errors="*{imagenUrl}"></p>
+                    </div>
+                </div>
+                <p class="campo__ayuda">Sin portada, el muro le pone una con el título.</p>
+            </fieldset>
+
+            <button type="submit" class="boton boton--negro boton--ancho">Publicar cómic</button>
+        </form>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: pie}"></footer>
+</body>
+</html>

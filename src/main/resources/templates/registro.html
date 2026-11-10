@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Crear cuenta')}"></head>
+<body>
+<header th:replace="~{fragments :: encabezado}"></header>
+
+<main class="contenedor contenedor--medio">
+    <div class="tarjeta-form">
+        <h1 class="titulo-pagina">Crear cuenta</h1>
+        <p class="tarjeta-form__intro">Con su cuenta puede publicar cómics. Los compradores verán su nombre,
+            ciudad, teléfono y correo para contactarlo.</p>
+
+        <form th:action="@{/registro}" th:object="${form}" method="post" class="formulario" novalidate>
+
+            <fieldset>
+                <legend>Sus datos</legend>
+                <div class="campo">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" th:field="*{nombre}" maxlength="100" required autocomplete="name">
+                    <p class="campo__error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+                </div>
+                <div class="rejilla-2">
+                    <div class="campo">
+                        <label for="telefono">Teléfono o celular</label>
+                        <input type="tel" th:field="*{telefono}" maxlength="20" required autocomplete="tel" inputmode="tel">
+                        <p class="campo__error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></p>
+                    </div>
+                    <div class="campo">
+                        <label for="ciudadDepartamento">Ciudad y departamento</label>
+                        <input type="text" th:field="*{ciudadDepartamento}" maxlength="150" required placeholder="Ej.: Bogotá, Cundinamarca">
+                        <p class="campo__error" th:if="${#fields.hasErrors('ciudadDepartamento')}" th:errors="*{ciudadDepartamento}"></p>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Cuenta</legend>
+                <div class="campo">
+                    <label for="correo">Correo</label>
+                    <input type="email" th:field="*{correo}" maxlength="100" required autocomplete="email">
+                    <p class="campo__error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></p>
+                </div>
+                <div class="rejilla-2">
+                    <div class="campo">
+                        <label for="contrasena">Contraseña</label>
+                        <input type="password" th:field="*{contrasena}" minlength="8" maxlength="72" required autocomplete="new-password">
+                        <p class="campo__ayuda">Mínimo 8 caracteres. Se guarda cifrada.</p>
+                        <p class="campo__error" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></p>
+                    </div>
+                    <div class="campo">
+                        <label for="confirmarContrasena">Repita la contraseña</label>
+                        <input type="password" th:field="*{confirmarContrasena}" required autocomplete="new-password">
+                        <p class="campo__error" th:if="${#fields.hasErrors('confirmarContrasena')}" th:errors="*{confirmarContrasena}"></p>
+                    </div>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="boton boton--negro boton--ancho">Crear cuenta</button>
+        </form>
+
+        <p class="tarjeta-form__pie">¿Ya tiene cuenta? <a th:href="@{/login}">Iniciar sesión</a></p>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: pie}"></footer>
+</body>
+</html>

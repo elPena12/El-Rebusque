@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Algo salió mal')}"></head>
+<body>
+<header th:replace="~{fragments :: encabezado}"></header>
+
+<main class="contenedor contenedor--angosto">
+    <div class="vacio">
+        <p class="error-codigo" th:text="${status}">404</p>
+        <h1 th:if="${status == 404}">No encontramos esa página</h1>
+        <h1 th:if="${status == 403}">No tiene permiso para hacer eso</h1>
+        <h1 th:if="${status != 404 and status != 403}">Algo salió mal</h1>
+        <p th:if="${status == 403 or message == 'El cómic no existe'}" th:text="${message}">El cómic no existe</p>
+        <a class="boton boton--negro" th:href="@{/}">Volver al muro</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: pie}"></footer>
+</body>
+</html>

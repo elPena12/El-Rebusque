@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${comic.titulo})}"></head>
+<body>
+<header th:replace="~{fragments :: encabezado}"></header>
+
+<main class="contenedor">
+    <div th:replace="~{fragments :: avisos}"></div>
+
+    <a class="volver" th:href="@{/}">Volver al muro</a>
+
+    <article class="ficha">
+        <div class="ficha__portada portada">
+            <th:block th:replace="~{fragments :: portada(${comic})}"></th:block>
+            <span class="sello" th:if="${comic.agotado}">Agotado</span>
+        </div>
+
+        <div class="ficha__datos">
+            <a class="chip" th:href="@{/(categoria=${comic.categoria.id})}" th:text="${comic.categoria.nombre}">Manga</a>
+            <h1 class="ficha__titulo" th:text="${comic.titulo}">Akira Vol. 1</h1>
+
+            <div class="ficha__compra">
+                <span class="precio precio--grande"
+                      th:text="'$' + ${#numbers.formatDecimal(comic.precio, 1, 'POINT', 0, 'COMMA')}">$85.000</span>
+                <p class="ficha__stock" th:if="${!comic.agotado}"
+                   th:text="${comic.stock == 1} ? '1 unidad disponible' : (${comic.stock} + ' unidades disponibles')">2 unidades disponibles</p>
+                <p class="ficha__stock ficha__stock--agotado" th:if="${comic.agotado}">Sin unidades por ahora</p>
+            </div>
+
+            <div class="ficha__descripcion" th:if="${comic.descripcion != null}">
+                <p th:text="${comic.descripcion}">Neo-Tokio, 2019.</p>
+            </div>
+
+            <p class="ficha__fecha">Publicado el <span th:text="${#temporals.format(comic.fecha, 'dd/MM/yyyy')}">07/11/2026</span></p>
+
+            <section class="vendedor" aria-labelledby="vendedor-titulo">
+                <h2 id="vendedor-titulo" class="vendedor__titulo">Vendedor:
+                    <span th:text="${comic.usuario.nombre}">Sarha Gomez</span></h2>
+                <p class="vendedor__lugar" th:text="${comic.usuario.ciudadDepartamento}">Bogotá, Cundinamarca</p>
+
+                <th:block th:if="${usuarioActual == null or usuarioActual.id != comic.usuario.id}">
+                    <div class="vendedor__acciones">
+                        <a class="boton boton--negro" target="_blank" rel="noopener"
+                           th:href="@{https://wa.me/{n}(n=${comic.usuario.telefonoWhatsapp},text=${'Hola, vi tu cómic ' + comic.titulo + ' en El Rebusque. ¿Sigue disponible?'})}">Escribir por WhatsApp</a>
+                        <a class="boton boton--borde" th:href="${'mailto:' + comic.usuario.correo}">Enviar correo</a>
+                    </div>
+                    <p class="vendedor__nota">El pago y la entrega se acuerdan directamente con el vendedor.</p>
+                </th:block>
+
+                <th:block th:if="${usuarioActual != null and usuarioActual.id == comic.usuario.id}">
+                    <p class="vendedor__nota">Esta publicación es suya.</p>
+                    <a class="boton boton--borde" th:href="@{/mis-comics}">Cambiar precio o stock</a>
+                </th:block>
+            </section>
+        </div>
+    </article>
+</main>
+
+<footer th:replace="~{fragments :: pie}"></footer>
+</body>
+</html>

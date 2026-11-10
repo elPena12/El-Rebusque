@@ -1,0 +1,693 @@
+/* =====================================================================
+   El Rebusque: tintas de imprenta (CMYK) sobre papel, viñetas de cómic
+   ===================================================================== */
+
+:root {
+    --papel: #FBFBF8;
+    --blanco: #FFFFFF;
+    --tinta: #000000;
+    --gris: #55554F;
+    --gris-claro: #D9D9D2;
+    --cian: #00AEEF;
+    --magenta: #D1007A;
+    --morado: #4b3ebd;
+    --verde-ok: #0B7A3B;
+
+    --borde: 3px solid var(--tinta);
+    --sombra: 4px 4px 0 var(--tinta);
+
+    --display: "Bowlby One", "Arial Black", Impact, sans-serif;
+    --texto: "Archivo", "Helvetica Neue", Arial, sans-serif;
+
+    --ancho: 1180px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    margin: 0;
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: var(--texto);
+    font-size: 1rem;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main { flex: 1; }
+
+a { color: inherit; }
+
+img { max-width: 100%; display: block; }
+
+:focus-visible {
+    outline: 3px solid var(--cian);
+    outline-offset: 3px;
+}
+
+.visualmente-oculto {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.contenedor {
+    width: 100%;
+    max-width: var(--ancho);
+    margin: 0 auto;
+    padding: 32px 16px 64px;
+}
+.contenedor--medio { max-width: 820px; }
+.contenedor--angosto { max-width: 480px; }
+
+/* ---------- Barra superior ---------- */
+
+.barra {
+    background: var(--tinta);
+    color: var(--blanco);
+}
+.barra__interior {
+    max-width: var(--ancho);
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.logo { text-decoration: none; }
+.logo__texto {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    line-height: 1;
+    letter-spacing: .01em;
+    color: var(--blanco);
+    /* Registro corrido: las tintas cian y magenta no caen exactas */
+    text-shadow: -2px -1px 0 var(--cian), 2px 2px 0 var(--magenta);
+}
+
+.barra__nav {
+    display: flex;
+    align-items: center;
+    gap: 6px 18px;
+    flex-wrap: wrap;
+}
+.barra__nav > a:not(.boton) {
+    color: var(--blanco);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+}
+.barra__nav > a:not(.boton):hover { border-bottom-color: var(--morado); }
+
+.barra__salir {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding-left: 14px;
+    border-left: 1px solid #444;
+}
+.barra__usuario { color: #BDBDB6; font-size: .95rem; }
+
+.enlace-boton {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--blanco);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+/* ---------- Botones ---------- */
+
+.boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--texto);
+    font-weight: 750;
+    font-size: 1rem;
+    line-height: 1.1;
+    padding: 12px 20px;
+    border: var(--borde);
+    background: var(--blanco);
+    color: var(--tinta);
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: var(--sombra);
+    transition: transform .08s ease, box-shadow .08s ease;
+}
+.boton:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--tinta); }
+.boton:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--tinta); }
+
+.boton--morado { background: var(--morado); }
+.boton--negro { background: var(--tinta); color: var(--blanco); }
+.boton--negro:focus-visible { outline-color: var(--magenta); }
+.boton--borde { background: var(--blanco); }
+.boton--peligro { background: var(--blanco); color: var(--magenta); border-color: var(--magenta); box-shadow: 4px 4px 0 var(--magenta); }
+.boton--peligro:hover { background: var(--magenta); color: var(--blanco); box-shadow: 5px 5px 0 var(--tinta); }
+.boton--chico { padding: 8px 12px; font-size: .9rem; box-shadow: 3px 3px 0 var(--tinta); }
+.boton--ancho { width: 100%; margin-top: 8px; }
+
+.barra .boton { border-color: var(--blanco); box-shadow: 3px 3px 0 var(--magenta); padding: 8px 14px; }
+
+/* ---------- Portadilla (inicio) ---------- */
+
+.portadilla {
+    background-color: var(--morado);
+    /* Trama de puntos de imprenta */
+    background-image: radial-gradient(rgba(0, 0, 0, .14) 1.3px, transparent 1.6px);
+    background-size: 9px 9px;
+    border-bottom: var(--borde);
+}
+.portadilla__interior {
+    max-width: var(--ancho);
+    margin: 0 auto;
+    padding: 48px 16px 36px;
+}
+
+.portadilla__titulo {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 5.2vw, 3.7rem);
+    line-height: 1;
+    letter-spacing: -.01em;
+    margin: 0 0 16px;
+    max-width: 19ch;
+    text-shadow: -3px -2px 0 var(--cian), 4px 3px 0 var(--magenta);
+}
+
+.portadilla__bajada {
+    font-size: 1.15rem;
+    font-weight: 500;
+    max-width: 52ch;
+    margin: 0 0 28px;
+}
+
+/* Buscador en forma de globo de diálogo */
+.globo {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    max-width: 780px;
+    background: var(--blanco);
+    border: var(--borde);
+    border-radius: 34px;
+    padding: 10px 10px 10px 22px;
+    box-shadow: 6px 6px 0 var(--tinta);
+}
+.globo::after {
+    /* colita del globo */
+    content: "";
+    position: absolute;
+    left: 56px;
+    bottom: -22px;
+    width: 30px;
+    height: 22px;
+    background: var(--blanco);
+    border-left: var(--borde);
+    border-bottom: var(--borde);
+    transform: skewX(-35deg);
+    border-bottom-left-radius: 4px;
+}
+.globo__texto {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 1.15rem;
+    font-weight: 500;
+    padding: 8px 0;
+}
+.globo__texto:focus { outline: none; }
+.globo:focus-within { box-shadow: 6px 6px 0 var(--cian); }
+.globo__categoria {
+    font: inherit;
+    font-weight: 600;
+    border: 2px solid var(--tinta);
+    border-radius: 999px;
+    padding: 8px 14px;
+    background: var(--papel);
+    max-width: 210px;
+}
+.globo .boton { border-radius: 999px; box-shadow: none; }
+.globo .boton:hover { transform: none; background: #222; }
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 40px;
+}
+.chip {
+    display: inline-block;
+    font-weight: 650;
+    font-size: .92rem;
+    text-decoration: none;
+    padding: 5px 12px;
+    border: 2px solid var(--tinta);
+    background: var(--blanco);
+    border-radius: 999px;
+}
+.chip:hover { background: var(--tinta); color: var(--blanco); }
+.chip--activo { background: var(--tinta); color: var(--morado); }
+
+/* ---------- Avisos ---------- */
+
+.avisos:empty { display: none; }
+.aviso {
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    border: var(--borde);
+    font-weight: 600;
+    background: var(--blanco);
+}
+.aviso--ok { border-left: 12px solid var(--verde-ok); }
+.aviso--error { border-left: 12px solid var(--magenta); color: #7A0047; }
+.aviso--info { border-left: 12px solid var(--cian); }
+
+/* ---------- Resultado de búsqueda ---------- */
+
+.resultado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--tinta);
+}
+.resultado p { margin: 0; font-size: 1.05rem; }
+.resultado a { font-weight: 650; }
+
+/* ---------- Muro: página de cómic con viñetas ---------- */
+
+.muro {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    grid-auto-flow: dense;
+    gap: 16px;
+}
+
+.vineta {
+    position: relative;
+    background: var(--blanco);
+    border: var(--borde);
+    display: flex;
+}
+/* Cada siete viñetas, una grande: rompe la cuadrícula como una página de cómic */
+@media (min-width: 720px) {
+    .vineta:nth-child(7n + 1) { grid-column: span 2; grid-row: span 2; }
+    .vineta:nth-child(7n + 1) .portada { aspect-ratio: auto; flex: 1; min-height: 320px; }
+    .vineta:nth-child(7n + 1) .vineta__titulo { font-size: 1.5rem; }
+    .vineta:nth-child(7n + 1) .portada__trama span { font-size: clamp(2rem, 4vw, 3.2rem); }
+}
+
+.vineta__enlace {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-decoration: none;
+}
+.vineta__enlace:hover .vineta__titulo { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.vineta__enlace:focus-visible { outline-offset: 4px; }
+
+.portada {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-bottom: var(--borde);
+    background: var(--gris-claro);
+}
+.portada__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.portada__trama {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 14px;
+    background-image: radial-gradient(rgba(0, 0, 0, .22) 1.6px, transparent 2px);
+    background-size: 8px 8px;
+}
+.portada__trama span {
+    font-family: var(--display);
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    line-height: 1.05;
+    background: var(--blanco);
+    border: var(--borde);
+    padding: 8px 10px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+.tinta-0 { background-color: var(--cian); }
+.tinta-1 { background-color: #F25CB0; }
+.tinta-2 { background-color: var(--morado); }
+
+.vineta__texto { padding: 12px 14px 14px; }
+.vineta__titulo {
+    font-family: var(--texto);
+    font-weight: 800;
+    font-stretch: 85%;
+    font-size: 1.1rem;
+    line-height: 1.2;
+    margin: 0 0 4px;
+}
+.vineta__meta {
+    margin: 0;
+    color: var(--gris);
+    font-size: .9rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 12px;
+}
+
+/* Etiqueta de precio pegada encima, como en las ventas de garaje */
+.precio {
+    position: absolute;
+    top: 12px;
+    right: -8px;
+    font-family: var(--display);
+    font-size: 1.05rem;
+    line-height: 1;
+    padding: 8px 10px 7px;
+    background: var(--morado);
+    border: var(--borde);
+    box-shadow: 3px 3px 0 var(--tinta);
+    transform: rotate(3deg);
+}
+.precio--grande {
+    position: static;
+    display: inline-block;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    padding: 10px 16px 9px;
+    transform: rotate(-2deg);
+    box-shadow: var(--sombra);
+}
+
+/* Agotado: portada desteñida y sello */
+.vineta--agotada .portada__img,
+.vineta--agotada .portada__trama,
+.item--agotado .portada__img,
+.item--agotado .portada__trama { filter: grayscale(1) contrast(.85); opacity: .7; }
+.sello {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    transform: translate(-50%, -50%) rotate(-12deg);
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: var(--magenta);
+    border: 4px solid var(--magenta);
+    padding: 4px 14px;
+    background: rgba(255, 255, 255, .88);
+}
+
+/* ---------- Estado vacío y error ---------- */
+
+.vacio {
+    text-align: center;
+    border: var(--borde);
+    background: var(--blanco);
+    padding: 48px 20px;
+}
+.vacio h1, .vacio h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    line-height: 1.1;
+    margin: 0 0 10px;
+}
+.vacio p { color: var(--gris); margin: 0 auto 22px; max-width: 46ch; }
+.error-codigo {
+    font-family: var(--display);
+    font-size: 5rem;
+    line-height: 1;
+    margin: 0 0 8px !important;
+    color: var(--tinta) !important;
+    text-shadow: -3px -2px 0 var(--cian), 4px 3px 0 var(--magenta);
+}
+
+/* ---------- Detalle del cómic ---------- */
+
+.volver {
+    display: inline-block;
+    font-weight: 650;
+    margin-bottom: 20px;
+}
+.volver::before { content: "‹ "; }
+
+.ficha {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 40px;
+    align-items: start;
+}
+.ficha__portada {
+    border: var(--borde);
+    box-shadow: 8px 8px 0 var(--tinta);
+    background: var(--blanco);
+}
+.ficha__portada .portada__trama span { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+
+.ficha__titulo {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    line-height: 1.02;
+    margin: 14px 0 22px;
+    overflow-wrap: anywhere;
+}
+.ficha__compra {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    margin-bottom: 24px;
+}
+.ficha__stock { margin: 0; font-weight: 650; }
+.ficha__stock--agotado { color: var(--magenta); }
+.ficha__descripcion {
+    font-size: 1.08rem;
+    line-height: 1.6;
+    max-width: 62ch;
+    white-space: pre-line;
+}
+.ficha__descripcion p { margin: 0 0 1em; }
+.ficha__fecha { color: var(--gris); font-size: .92rem; margin: 0 0 28px; }
+
+.vendedor {
+    border: var(--borde);
+    background: var(--blanco);
+    padding: 20px 22px 22px;
+    position: relative;
+}
+.vendedor__titulo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin: 0 0 2px;
+}
+.vendedor__lugar { margin: 0 0 18px; color: var(--gris); }
+.vendedor__acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+.vendedor__nota { margin: 0 0 12px; font-size: .92rem; color: var(--gris); }
+
+/* ---------- Formularios ---------- */
+
+.tarjeta-form {
+    background: var(--blanco);
+    border: var(--borde);
+    box-shadow: 8px 8px 0 var(--tinta);
+    padding: 28px 28px 24px;
+}
+.titulo-pagina {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    line-height: 1.05;
+    margin: 0 0 8px;
+}
+.tarjeta-form__intro { color: var(--gris); margin: 0 0 24px; max-width: 60ch; }
+.tarjeta-form__pie { margin: 22px 0 0; text-align: center; }
+.tarjeta-form__pie a { font-weight: 700; }
+
+.formulario fieldset {
+    border: 0;
+    border-top: 2px solid var(--tinta);
+    margin: 0 0 18px;
+    padding: 14px 0 0;
+}
+.formulario legend {
+    font-weight: 800;
+    font-size: 1.05rem;
+    padding: 0 10px 0 0;
+}
+.campo { margin-bottom: 16px; min-width: 0; }
+.campo label {
+    display: block;
+    font-weight: 650;
+    font-size: .95rem;
+    margin-bottom: 6px;
+}
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    font: inherit;
+    padding: 10px 12px;
+    border: 2px solid var(--tinta);
+    border-radius: 4px;
+    background: var(--blanco);
+    color: var(--tinta);
+}
+.campo textarea { resize: vertical; min-height: 110px; }
+.campo input[type="file"] { padding: 8px; background: var(--papel); }
+.campo input:focus, .campo select:focus, .campo textarea:focus {
+    outline: none;
+    border-color: var(--cian);
+    box-shadow: 0 0 0 3px rgba(0, 174, 239, .35);
+}
+.campo__ayuda { font-size: .85rem; color: var(--gris); margin: 6px 0 0; }
+.campo__error { font-size: .88rem; color: #A1005E; font-weight: 650; margin: 6px 0 0; }
+.campo--corto { max-width: 180px; }
+.opcional { font-weight: 400; color: var(--gris); }
+
+.rejilla-2, .rejilla-3, .rejilla-5 { display: grid; gap: 0 16px; }
+.rejilla-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rejilla-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rejilla-5 { grid-template-columns: 2fr 1fr 1fr 1.4fr 1fr; }
+
+.desplegable {
+    border: 2px dashed var(--tinta);
+    padding: 12px 16px;
+    margin: 0 0 18px;
+}
+.desplegable summary { font-weight: 800; cursor: pointer; }
+.desplegable[open] summary { margin-bottom: 10px; }
+
+/* ---------- Mis cómics ---------- */
+
+.encabezado-pagina {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.inventario { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.item {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) auto auto auto;
+    align-items: center;
+    gap: 14px 22px;
+    background: var(--blanco);
+    border: var(--borde);
+    padding: 12px 16px 12px 12px;
+}
+.item__portada {
+    border: 2px solid var(--tinta);
+    width: 76px;
+    display: block;
+}
+.item__portada .portada__trama { padding: 4px; }
+.item__portada .portada__trama span { font-size: .6rem; padding: 2px 3px; border-width: 1px; }
+.item__titulo { font-size: 1.1rem; font-weight: 800; margin: 0 0 4px; line-height: 1.2; }
+.item__titulo a { text-decoration: none; }
+.item__titulo a:hover { text-decoration: underline; }
+.item__meta { margin: 0; color: var(--gris); font-size: .9rem; display: flex; flex-wrap: wrap; gap: 0 14px; }
+.item__estado { color: var(--magenta); font-weight: 700; }
+.item__ajuste { margin: 0; }
+.item__ajuste label { display: block; font-size: .82rem; font-weight: 650; margin-bottom: 4px; }
+.item__fila { display: flex; gap: 8px; }
+.item__fila input {
+    width: 120px;
+    font: inherit;
+    padding: 7px 10px;
+    border: 2px solid var(--tinta);
+    border-radius: 4px;
+}
+.item__ajuste:last-of-type .item__fila input { width: 80px; }
+.item__fila input:focus { outline: none; border-color: var(--cian); box-shadow: 0 0 0 3px rgba(0, 174, 239, .35); }
+.item__borrar { margin: 0; align-self: end; }
+
+/* ---------- Pie ---------- */
+
+.pie {
+    background: var(--tinta);
+    color: #CFCFC8;
+    font-size: .92rem;
+}
+.pie__interior {
+    max-width: var(--ancho);
+    margin: 0 auto;
+    padding: 28px 16px 32px;
+}
+.pie p { margin: 0 0 6px; max-width: 70ch; }
+.pie strong { color: var(--blanco); }
+.pie__curso { color: #8C8C85; }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+    .item { grid-template-columns: 64px minmax(0, 1fr); }
+    .item__portada { width: 64px; grid-row: span 2; align-self: start; }
+    .item__ajuste, .item__borrar { grid-column: 2; }
+    .item__borrar { justify-self: start; }
+}
+
+@media (max-width: 760px) {
+    .ficha { grid-template-columns: 1fr; gap: 28px; }
+    .ficha__portada { max-width: 360px; }
+    .rejilla-3 { grid-template-columns: 1fr; }
+    .rejilla-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+    .barra__interior { justify-content: center; }
+    .barra__nav { justify-content: center; }
+    .barra__salir { border-left: 0; padding-left: 0; }
+    .portadilla__interior { padding-top: 32px; }
+    .globo { flex-wrap: wrap; border-radius: 22px; padding: 12px; }
+    .globo__texto { flex-basis: 100%; padding: 4px 6px; }
+    .globo__categoria { flex: 1; max-width: none; }
+    .muro { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .vineta__texto { padding: 10px; }
+    .vineta__titulo { font-size: 1rem; }
+    .precio { font-size: .92rem; right: -6px; }
+    .rejilla-2 { grid-template-columns: 1fr; }
+    .tarjeta-form { padding: 22px 16px; box-shadow: 5px 5px 0 var(--tinta); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boton { transition: none; }
+    .boton:hover, .boton:active { transform: none; }
+}
+
+/* Miniaturas del panel: solo la trama, sin el título */
+.item__portada .portada__trama span { display: none; }
+
+@media (max-width: 600px) {
+    .portadilla__titulo { text-shadow: -2px -1px 0 var(--cian), 3px 2px 0 var(--magenta); }
+}

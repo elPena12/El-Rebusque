@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' | El Rebusque'">El Rebusque</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=Bowlby+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}" href="../static/css/estilos.css">
+    <link rel="icon" th:href="@{/img/icono.svg}" type="image/svg+xml">
+</head>
+<body>
+
+<header class="barra" th:fragment="encabezado">
+    <div class="barra__interior">
+        <a class="logo" th:href="@{/}" href="#">
+            <span class="logo__texto" data-texto="El Rebusque">El Rebusque</span>
+        </a>
+        <nav class="barra__nav" aria-label="Principal">
+            <a th:href="@{/}" href="#">Muro</a>
+            <th:block th:if="${usuarioActual != null}">
+                <a th:href="@{/mis-comics}" href="#">Mis cómics</a>
+                <a class="boton boton--amarillo" th:href="@{/publicar}" href="#">Publicar cómic</a>
+                <form th:action="@{/logout}" method="post" class="barra__salir">
+                    <span class="barra__usuario" th:text="${usuarioActual.primerNombre}">Sarha</span>
+                    <button type="submit" class="enlace-boton">Salir</button>
+                </form>
+            </th:block>
+            <th:block th:if="${usuarioActual == null}">
+                <a th:href="@{/login}" href="#">Iniciar sesión</a>
+                <a class="boton boton--amarillo" th:href="@{/registro}" href="#">Crear cuenta</a>
+            </th:block>
+        </nav>
+    </div>
+</header>
+
+<div th:fragment="avisos" class="avisos">
+    <p class="aviso aviso--ok" role="status" th:if="${mensaje}" th:text="${mensaje}">Cómic publicado</p>
+    <p class="aviso aviso--error" role="alert" th:if="${error}" th:text="${error}">El precio debe ser mayor que cero</p>
+</div>
+
+<footer class="pie" th:fragment="pie">
+    <div class="pie__interior">
+        <p><strong>El Rebusque</strong> conecta a quien vende cómics con quien los busca.
+            El pago y la entrega se acuerdan directamente entre comprador y vendedor.</p>
+        <p class="pie__curso">Proyecto de curso de Base de Datos, Universidad Distrital</p>
+    </div>
+</footer>
+
+<!-- Portada: imagen real o, si no tiene, una portada tramada con el título -->
+<th:block th:fragment="portada(comic)">
+    <img th:if="${comic.tieneImagen()}" class="portada__img" th:src="@{${comic.imagen}}"
+         th:alt="'Portada de ' + ${comic.titulo}" loading="lazy">
+    <div th:unless="${comic.tieneImagen()}" class="portada__trama"
+         th:classappend="${'tinta-' + (comic.categoria.id % 3)}" aria-hidden="true">
+        <span th:text="${comic.titulo}">Título</span>
+    </div>
+</th:block>
+
+</body>
+</html>

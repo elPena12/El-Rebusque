@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Mis cómics')}"></head>
+<body>
+<header th:replace="~{fragments :: encabezado}"></header>
+
+<main class="contenedor">
+    <div class="encabezado-pagina">
+        <h1 class="titulo-pagina">Mis cómics</h1>
+        <a class="boton boton--amarillo" th:href="@{/publicar}">Publicar cómic</a>
+    </div>
+
+    <div th:replace="~{fragments :: avisos}"></div>
+
+    <section class="vacio" th:if="${#lists.isEmpty(comics)}">
+        <h2>Todavía no ha publicado cómics</h2>
+        <p>Cuando publique uno, aquí podrá cambiar su precio, sus unidades o borrarlo.</p>
+        <a class="boton boton--amarillo" th:href="@{/publicar}">Publicar cómic</a>
+    </section>
+
+    <ul class="inventario" th:unless="${#lists.isEmpty(comics)}">
+        <li class="item" th:each="comic : ${comics}" th:classappend="${comic.agotado} ? 'item--agotado'">
+            <a class="item__portada portada" th:href="@{/comics/{id}(id=${comic.id})}">
+                <th:block th:replace="~{fragments :: portada(${comic})}"></th:block>
+            </a>
+
+            <div class="item__info">
+                <h2 class="item__titulo"><a th:href="@{/comics/{id}(id=${comic.id})}" th:text="${comic.titulo}">Akira Vol. 1</a></h2>
+                <p class="item__meta">
+                    <span th:text="${comic.categoria.nombre}">Manga</span>
+                    <span th:text="'Publicado el ' + ${#temporals.format(comic.fecha, 'dd/MM/yyyy')}">Publicado el 07/11/2026</span>
+                    <span class="item__estado" th:if="${comic.agotado}">Agotado</span>
+                </p>
+            </div>
+
+            <form class="item__ajuste" th:action="@{/comics/{id}/precio(id=${comic.id})}" method="post">
+                <label th:for="'precio-' + ${comic.id}">Precio (COP)</label>
+                <div class="item__fila">
+                    <input type="number" name="precio" th:id="'precio-' + ${comic.id}" min="1" step="any" required
+                           th:value="${comic.precio.stripTrailingZeros().toPlainString()}">
+                    <button type="submit" class="boton boton--borde boton--chico">Guardar precio</button>
+                </div>
+            </form>
+
+            <form class="item__ajuste" th:action="@{/comics/{id}/stock(id=${comic.id})}" method="post">
+                <label th:for="'stock-' + ${comic.id}">Unidades</label>
+                <div class="item__fila">
+                    <input type="number" name="stock" th:id="'stock-' + ${comic.id}" min="0" step="1" required th:value="${comic.stock}">
+                    <button type="submit" class="boton boton--borde boton--chico">Guardar stock</button>
+                </div>
+            </form>
+
+            <form class="item__borrar" th:action="@{/comics/{id}/eliminar(id=${comic.id})}" method="post"
+                  th:attr="data-titulo=${comic.titulo}"
+                  onsubmit="return confirm('¿Borrar «' + this.dataset.titulo + '» del muro? Esta acción no se puede deshacer.');">
+                <button type="submit" class="boton boton--peligro boton--chico">Borrar</button>
+            </form>
+        </li>
+    </ul>
+</main>
+
+<footer th:replace="~{fragments :: pie}"></footer>
+</body>
+</html>
